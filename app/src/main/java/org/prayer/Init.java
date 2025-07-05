@@ -1,20 +1,29 @@
-package org.prayer;
+package org.prayer; 
+
 import java.io.File;
 import java.util.Random;
 import java.io.IOException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class Init {
+	// global statics
 	public final static String WELCOME_MESSAGE = "Welcome to prayer, a cli journaling application that help you organize and express your thought and prayers to Jesus.";
+	public final static String EXIT_MESSAGE = "\n[Philippians 4:19] And my God will supply every need of yours according to his riches in glory in Christ Jesus.";
+	public final static String PRAYER_JOURNAL_CONFIG_HOME = String.format("%s/.config/prayer/", System.getProperty("user.home"));
+	public final static String PRAYER_JOURNAL_CONFIG = String.format("%s/pjrc.json", Init.PRAYER_JOURNAL_CONFIG_HOME);
 	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/prayer/", System.getProperty("user.home"));
 	public final static String BIBLE_VERSION = "net";
-	private static String appConfigHome;
+
+	// dynamic
 	public String header;
 	public String bibleVerse;
+	
+	// constuctor
 	public Init() {
 		this.setHeader();
-		this.appDirectoryConfigCreator();
+		this.appConfigurationSetup();
 		this.setBibleVerse();
 	}
 
@@ -64,11 +73,51 @@ public class Init {
 		String bibleVerse = String.format("[%s %s:%s] %s", book_name, chapter, verse, text);
 		return bibleVerse;
 	}
-	public void appDirectoryConfigCreator() {
-		File directory = new File(Init.PRAYER_CONFIG_HOME);
+	public void appConfigurationSetup() {
+		// create configuration directory if it doesn't exist
+		File directory = new File(Init.PRAYER_JOURNAL_CONFIG_HOME);
         if (!directory.exists()) {
             directory.mkdir();
 		}
-	}
 
+		// create configuration file if it doesn't exist
+		File f = new File(Init.PRAYER_JOURNAL_CONFIG);
+        if (!f.exists() && !f.isDirectory()) {
+			SystemConfiguration config = new SystemConfiguration();
+			Workflow workflow = new Workflow();
+			// set encryption
+			boolean encrypt = workflow.getUserInputBoolean("Does you want to encrypt your entries: [y/n]");
+			config.setEncryption(encrypt);
+
+			// set password protection
+			boolean passwordProtection = workflow.getUserInputBoolean("Do you want password protection for access to your journal: [y/n]");
+			config.setPasswordProtection(passwordProtection);
+			if (config.getPasswordProtection()) {
+
+				// set password
+				String password = workflow.getUserInputWithValidation("Enter the password you want");
+				config.setPassword(password);
+			}
+
+			// set journal directory configuration
+			String prompt = String.format("Do you want to you the default directory to write entries (%s): [y/n]", SystemConfiguration.DEFAULT_JOURNAL_ENTRIES_DIRECTORY);
+			boolean defaultEntryDirectory = workflow.getUserInputBoolean(prompt);
+			if (!defaultEntryDirectory) {
+				
+				// set custom entries directory
+				String entriesDir = workflow.getUserInput("Enter your desired directory");
+				config.setEntriesDir(entriesDir);
+			}
+			
+			workflow.closeScanner();
+
+
+			// log object to console
+			try {
+				System.out.println(new ObjectMapper().writeValueAsString(config));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
