@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Init {
-	public final static String WELCOME_MESSAGE = "Welcome to prayer, a cli journaling application that help you organize and express your thought and prayers to our Lord.";
+	public final static String WELCOME_MESSAGE = "Welcome to prayer, a cli journaling application that help you organize and express your thought and prayers to Jesus.";
 	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/prayer/", System.getProperty("user.home"));
 	public final static String BIBLE_VERSION = "net";
 	private static String appConfigHome;
@@ -30,6 +30,7 @@ public class Init {
 	public void setBibleVerse() {
 		try {
 			// converts InputStream to string through readAllBytes() method
+			// prayers.json was scraped from https://api.biblesupersearch.com/api?bible=net&search=prayer
 			ObjectMapper objectMapper = new ObjectMapper();
 			String biblePrayerVersesJson = new String(getClass().getClassLoader().getResourceAsStream("prayers.json").readAllBytes());
 
@@ -60,7 +61,7 @@ public class Init {
 		String chapter = node.get("chapter_verse").toString().split(":")[0].replaceAll("\"","");
 		String verse = node.get("chapter_verse").toString().split(":")[1].replaceAll("\"","");
 		String text = node.get("verses").get(Init.BIBLE_VERSION).get(chapter).get(verse).get("text").toString().replaceAll("\"","");
-		String bibleVerse = String.format("\n[%s %s:%s] %s", book_name, chapter, verse, text);
+		String bibleVerse = String.format("[%s %s:%s] %s", book_name, chapter, verse, text);
 		return bibleVerse;
 	}
 	public void appDirectoryConfigCreator() {

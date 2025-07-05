@@ -8,7 +8,6 @@ public class App {
     public String start() {
 		Init init = new Init();
 		System.out.println(init.getHeader());
-		System.out.println(Init.WELCOME_MESSAGE);
 		System.out.println(init.getBibleVerse());
 		/*
 		Scanner scanner = new Scanner(System.in);
