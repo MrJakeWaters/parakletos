@@ -1,8 +1,8 @@
 package org.prayer; 
 
+import java.io.IOException;
 import java.io.File;
 import java.util.Random;
-import java.io.IOException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,9 +22,17 @@ public class Init {
 	
 	// constuctor
 	public Init() {
+		// display application header
 		this.setHeader();
-		this.appConfigurationSetup();
+		System.out.println(this.getHeader());
+
+		// display bible
 		this.setBibleVerse();
+		System.out.println(this.getBibleVerse());
+
+		// check for configrations
+		this.appConfigurationSetup();
+
 	}
 
 	// setters
@@ -74,50 +82,55 @@ public class Init {
 		return bibleVerse;
 	}
 	public void appConfigurationSetup() {
+		System.out.println("\n");
 		// create configuration directory if it doesn't exist
 		File directory = new File(Init.PRAYER_JOURNAL_CONFIG_HOME);
         if (!directory.exists()) {
             directory.mkdir();
+		} else {
+			System.out.println("Configuration Directory Setup");
 		}
 
 		// create configuration file if it doesn't exist
 		File f = new File(Init.PRAYER_JOURNAL_CONFIG);
         if (!f.exists() && !f.isDirectory()) {
+			// console message and initialization
+			System.out.println("Need to setup some of your configurations");
 			SystemConfiguration config = new SystemConfiguration();
 			Workflow workflow = new Workflow();
+
 			// set encryption
-			boolean encrypt = workflow.getUserInputBoolean("Does you want to encrypt your entries: [y/n]");
+			boolean encrypt = workflow.getUserInputBoolean("Do you want to encrypt your journal entries? [Y/n] ");
 			config.setEncryption(encrypt);
 
 			// set password protection
-			boolean passwordProtection = workflow.getUserInputBoolean("Do you want password protection for access to your journal: [y/n]");
+			boolean passwordProtection = workflow.getUserInputBoolean("Do you want password protection for access to your journal? [Y/n] ");
 			config.setPasswordProtection(passwordProtection);
 			if (config.getPasswordProtection()) {
 
 				// set password
-				String password = workflow.getUserInputWithValidation("Enter the password you want");
+				String password = workflow.getUserInputWithValidation("Enter the password you want > ");
 				config.setPassword(password);
 			}
 
 			// set journal directory configuration
-			String prompt = String.format("Do you want to you the default directory to write entries (%s): [y/n]", SystemConfiguration.DEFAULT_JOURNAL_ENTRIES_DIRECTORY);
+			String prompt = String.format("Do you want to you the default directory to write entries (%s)? [Y/n] ", SystemConfiguration.DEFAULT_JOURNAL_ENTRIES_DIRECTORY);
 			boolean defaultEntryDirectory = workflow.getUserInputBoolean(prompt);
 			if (!defaultEntryDirectory) {
 				
 				// set custom entries directory
-				String entriesDir = workflow.getUserInput("Enter your desired directory");
+				String entriesDir = workflow.getUserInput("Enter your desired directory > ");
 				config.setEntriesDir(entriesDir);
 			}
 			
-			workflow.closeScanner();
-
-
 			// log object to console
 			try {
 				System.out.println(new ObjectMapper().writeValueAsString(config));
 			} catch (JsonProcessingException e) {
 				e.printStackTrace();
 			}
+		} else {
+			System.out.println("Configuration File Already Setup");
 		}
 	}
 }
