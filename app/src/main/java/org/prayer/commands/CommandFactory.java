@@ -1,11 +1,13 @@
 package org.prayer;
 
 public class CommandFactory {
+	public Command command;
 	public CommandFactory(String[] args) {
 		if (args.length == 0) {
-			AddJournalEntryCommand command = new AddJournalEntryCommand(args);
+			this.command = new AddJournalEntryCommand(args);
 		} else {
-			System.out.println("Do something else");
+			this.command = new Command(args);
 		}
+		this.command.displayExitMessage();
 	}
 }

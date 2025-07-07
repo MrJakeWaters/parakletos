@@ -1,19 +1,18 @@
 package org.prayer; 
 
-import java.io.IOException;
 import java.io.File;
+import java.util.Map;
 import java.util.Random;
+import java.io.IOException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class Init {
 	// global statics
-	public final static String WELCOME_MESSAGE = "Welcome to prayer, a cli journaling application that help you organize and express your thought and prayers to Jesus.";
-	public final static String EXIT_MESSAGE = "\n[Philippians 4:19] And my God will supply every need of yours according to his riches in glory in Christ Jesus.";
-	public final static String PRAYER_JOURNAL_CONFIG_HOME = String.format("%s/.config/prayer/", System.getProperty("user.home"));
-	public final static String PRAYER_JOURNAL_CONFIG = String.format("%s/pjrc.json", Init.PRAYER_JOURNAL_CONFIG_HOME);
-	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/prayer/", System.getProperty("user.home"));
+	public final static String PJ_CONFIG_HOME = String.format("%s/.config/pj/", System.getProperty("user.home"));
+	public final static String PJ_CONFIG = String.format("%s/pjrc.json", Init.PJ_CONFIG_HOME);
+	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/pj/", System.getProperty("user.home"));
 	public final static String BIBLE_VERSION = "net";
 
 	// dynamic
@@ -84,7 +83,7 @@ public class Init {
 	public void appConfigurationSetup() {
 		System.out.println("\n");
 		// create configuration directory if it doesn't exist
-		File directory = new File(Init.PRAYER_JOURNAL_CONFIG_HOME);
+		File directory = new File(Init.PJ_CONFIG_HOME);
         if (!directory.exists()) {
             directory.mkdir();
 		} else {
@@ -92,41 +91,18 @@ public class Init {
 		}
 
 		// create configuration file if it doesn't exist
-		File f = new File(Init.PRAYER_JOURNAL_CONFIG);
+		File f = new File(Init.PJ_CONFIG);
         if (!f.exists() && !f.isDirectory()) {
 			// console message and initialization
 			System.out.println("Need to setup some of your configurations");
 			SystemConfiguration config = new SystemConfiguration();
-			Workflow workflow = new Workflow();
-
-			// set encryption
-			boolean encrypt = workflow.getUserInputBoolean("Do you want to encrypt your journal entries? [Y/n] ");
-			config.setEncryption(encrypt);
-
-			// set password protection
-			boolean passwordProtection = workflow.getUserInputBoolean("Do you want password protection for access to your journal? [Y/n] ");
-			config.setPasswordProtection(passwordProtection);
-			if (config.getPasswordProtection()) {
-
-				// set password
-				String password = workflow.getUserInputWithValidation("Enter the password you want > ");
-				config.setPassword(password);
-			}
-
-			// set journal directory configuration
-			String prompt = String.format("Do you want to you the default directory to write entries (%s)? [Y/n] ", SystemConfiguration.DEFAULT_JOURNAL_ENTRIES_DIRECTORY);
-			boolean defaultEntryDirectory = workflow.getUserInputBoolean(prompt);
-			if (!defaultEntryDirectory) {
-				
-				// set custom entries directory
-				String entriesDir = workflow.getUserInput("Enter your desired directory > ");
-				config.setEntriesDir(entriesDir);
-			}
+			config.setEntriesDir(SystemConfiguration.DEFAULT_PJ_ENTRIES_DIRECTORY);
 			
-			// log object to console
+			ObjectMapper mapper = new ObjectMapper();
 			try {
-				System.out.println(new ObjectMapper().writeValueAsString(config));
-			} catch (JsonProcessingException e) {
+				// Serialize Java object to JSON file
+				mapper.writeValue(new File(Init.PJ_CONFIG), config);
+			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		} else {

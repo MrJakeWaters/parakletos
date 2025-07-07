@@ -1,8 +1,7 @@
 package org.prayer;
-import java.util.Scanner;
 
 public class AddJournalEntryCommand extends Command {
-	public String entry;
+	public Entry entry;
 	public AddJournalEntryCommand(String[] args) {
 		super(args);
 		this.setCommand("add-journal-entry");
@@ -10,15 +9,14 @@ public class AddJournalEntryCommand extends Command {
 		this.run();
 	}
 	public void run() {
-		Scanner scanner = new Scanner(System.in);
-		System.out.println("Write your entry. (press Ctrl+D to save)");
+		Workflow workflow = new Workflow();
+		String entryText = workflow.getUserInput("\nEntry: ");
+		this.entry = new Entry(entryText);
+		String writeDir = String.format("%s/%s", this.configs.get("entriesDir"), this.executionDate);
+		String fullFileName = String.format("%s/%s.orc", writeDir, this.entry.getEntryTimestamp().toString().replace(":","_"));
 
-		// wait for Ctrl+D
-		this.entry = "\n\nYour Entry: ";
-		while (scanner.hasNextLine()) {
-			this.entry = String.format("%s%s", this.entry, scanner.nextLine());
-		}
-		scanner.close();
-		System.out.println(String.format("%s\n", this.entry));
+		// create orc writer
+		OrcWriter orc = new OrcWriter(this.entry);
+		orc.writeFile(fullFileName, entry.getEntryTimestamp());
 	};
 }
