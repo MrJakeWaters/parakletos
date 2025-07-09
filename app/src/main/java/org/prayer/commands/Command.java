@@ -20,7 +20,7 @@ public class Command {
 		this.args = args;
 		this.command = "";
 		this.setConfigs();
-		this.executionDate = new SimpleDateFormat("MM-dd-yyyy").format(new Date());
+		this.executionDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 	}
 	
 	// customizable methods

@@ -1,9 +1,32 @@
 package org.prayer;
 
+// standard
+import java.io.File;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.io.IOException;
+import java.lang.reflect.Field;
+// jackson json objects
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+// avro
+import org.apache.avro.Schema;
+import org.apache.avro.io.DatumWriter;
+import org.apache.avro.reflect.ReflectData;
+import org.apache.avro.file.DataFileWriter;
+import org.apache.avro.generic.GenericData;
+import org.apache.avro.generic.GenericRecord;
+import org.apache.avro.generic.GenericDatumWriter;
+
 public class AddJournalEntryCommand extends Command {
+	// https://kapilsreed.medium.com/apache-avro-demystified-66d80426c752
 	public Entry entry;
 	public AddJournalEntryCommand(String[] args) {
+		// inhert
 		super(args);
+		
+		// set base attributes and execute command
 		this.setCommand("add-journal-entry");
 		this.setDescription("Saves a journal entry with attached timestamp");
 		this.run();
@@ -12,11 +35,49 @@ public class AddJournalEntryCommand extends Command {
 		Workflow workflow = new Workflow();
 		String entryText = workflow.getUserInput("\nEntry: ");
 		this.entry = new Entry(entryText);
-		String writeDir = String.format("%s/%s", this.configs.get("entriesDir"), this.executionDate);
-		String fullFileName = String.format("%s/%s.orc", writeDir, this.entry.getEntryTimestamp().toString().replace(":","_"));
+		
+		// ensure entries and partition of entry directories exist
+		String entriesDir = String.valueOf(this.configs.get("entriesDir"));
+		File directory = new File(entriesDir);
+        if (!directory.exists()) {
+            directory.mkdir();
+			System.out.println(String.format("[INFO] Entries Directory Created: %s", entriesDir));
+		}
 
-		// create orc writer
-		OrcWriter orc = new OrcWriter(this.entry);
-		orc.writeFile(fullFileName, entry.getEntryTimestamp());
+		// create entries partition directory exists
+		String entriesDatePartitionDir = String.format("%s/%s/", entriesDir, this.executionDate);
+		File partitionDirectory = new File(entriesDatePartitionDir);
+		if (!partitionDirectory.exists()) {
+			partitionDirectory.mkdir();
+			System.out.println(String.format("[INFO] New Partition Created: %s", entriesDir));
+		}
+
+		// must be unique
+		String fileName = String.format("%s/%s/%s.avro", this.configs.get("entriesDir"), this.executionDate, this.entry.getEntryId());
+		//String fileName = String.format("%s/%s.avro", "/home/jacwater/pj/entries", this.entry.getEntryId());
+        Schema schema = ReflectData.get().getSchema(Entry.class);
+
+		// convert java class to generic record for SpecificDatumWriter
+		Map<String, Object> entryMap = new AvroAbstract(this.entry).getMap();
+		GenericRecord avroRecord = new GenericData.Record(schema);
+		schema.getFields().forEach(field -> {
+			avroRecord.put(field.name(), entryMap.get(field.name()));
+		});
+
+		// create avro writer
+		DatumWriter<GenericRecord> writer = new GenericDatumWriter<GenericRecord>(schema);
+		DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<GenericRecord>(writer);
+
+		// set data record schema to writer
+		try {
+			dataFileWriter.create(schema, new File(fileName));
+
+			// add object to writer and write
+			dataFileWriter.append(avroRecord);
+			dataFileWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	};
 }
