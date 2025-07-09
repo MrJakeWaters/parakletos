@@ -56,6 +56,7 @@ public class AddJournalEntryCommand extends Command {
 		String fileName = String.format("%s/%s/%s.avro", this.configs.get("entriesDir"), this.executionDate, this.entry.getEntryId());
 		//String fileName = String.format("%s/%s.avro", "/home/jacwater/pj/entries", this.entry.getEntryId());
         Schema schema = ReflectData.get().getSchema(Entry.class);
+		System.out.println(schema.toString());
 
 		// convert java class to generic record for SpecificDatumWriter
 		Map<String, Object> entryMap = new AvroAbstract(this.entry).getMap();
