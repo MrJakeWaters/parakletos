@@ -1,28 +1,23 @@
-package org.prayer; 
+package org.parakletos; 
 
-import java.io.IOException;
-import org.jline.reader.*;
+// standard
 import java.nio.file.Paths;
-import org.jline.reader.Completer;
-import org.jline.builtins.Completers.DirectoriesCompleter;
-import org.jline.reader.impl.completer.StringsCompleter;
-import org.jline.reader.impl.*;
+import java.io.IOException;
+// jline
+import org.jline.reader.*;
 import org.jline.terminal.*;
+import org.jline.reader.impl.*;
 import org.jline.terminal.impl.*;
-import java.io.Console;
-import java.util.Scanner;
 
 public class Workflow {
 	public Terminal terminal;
 	public LineReader reader;
 	public Workflow() {
 		try {
-			Completer dirCompleter = new DirectoriesCompleter(Paths.get("."));
 			this.terminal = TerminalBuilder.builder().system(true).build();
 			this.reader = LineReaderBuilder
 				.builder()
 				.terminal(this.terminal)
-				.completer(dirCompleter)
 				.build();
 		} catch (IOException e) {
 			e.printStackTrace();

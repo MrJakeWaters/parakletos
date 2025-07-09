@@ -1,4 +1,4 @@
-package org.prayer;
+package org.parakletos;
 import java.io.File;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,7 +1,7 @@
-package org.prayer;
+package org.parakletos;
 
 public class App {
-	public final static String WELCOME_MESSAGE = "Welcome to pj, a cli journaling application that help you organize and express your thought and prayers to Jesus.";
+	public final static String WELCOME_MESSAGE = "Welcome to pk, a cli journaling application that help you organize and express your thought and prayers to Jesus.";
 	public final static String EXIT_MESSAGE = "\nAll Done!";
     public String start(String[] args) {
 		System.out.println(App.WELCOME_MESSAGE);

@@ -1,4 +1,4 @@
-package org.prayer;
+package org.parakletos;
 
 import java.util.Map;
 import java.util.HashMap;

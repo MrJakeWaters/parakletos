@@ -1,4 +1,4 @@
-package org.prayer;
+package org.parakletos;
 
 public class CommandFactory {
 	public Command command;

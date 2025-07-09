@@ -1,4 +1,4 @@
-package org.prayer;
+package org.parakletos;
 
 // standard
 import java.io.File;
@@ -32,9 +32,15 @@ public class AddJournalEntryCommand extends Command {
 		this.run();
 	}
 	public void run() {
+		// initialize entry and start workflow
+		// this set uuid and start timestamp
+		this.entry = new Entry();
 		Workflow workflow = new Workflow();
-		String entryText = workflow.getUserInput("\nEntry: ");
-		this.entry = new Entry(entryText);
+		String content = workflow.getUserInput("\nEntry: ");
+		
+		// set end timestamp and entry content
+		this.entry.setText(content);
+		this.entry.setEntryEndTs();
 		
 		// ensure entries and partition of entry directories exist
 		String entriesDir = String.valueOf(this.configs.get("entriesDir"));
@@ -54,7 +60,6 @@ public class AddJournalEntryCommand extends Command {
 
 		// must be unique
 		String fileName = String.format("%s/%s/%s.avro", this.configs.get("entriesDir"), this.executionDate, this.entry.getEntryId());
-		//String fileName = String.format("%s/%s.avro", "/home/jacwater/pj/entries", this.entry.getEntryId());
         Schema schema = ReflectData.get().getSchema(Entry.class);
 
 		// convert java class to generic record for SpecificDatumWriter

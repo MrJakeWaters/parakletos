@@ -1,4 +1,4 @@
-package org.prayer; 
+package org.parakletos; 
 
 import java.io.File;
 import java.util.Map;
@@ -10,9 +10,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class Init {
 	// global statics
-	public final static String PJ_CONFIG_HOME = String.format("%s/.config/pj/", System.getProperty("user.home"));
-	public final static String PJ_CONFIG = String.format("%s/pjrc.json", Init.PJ_CONFIG_HOME);
-	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/pj/", System.getProperty("user.home"));
+	public final static String PK_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
+	public final static String PK_CONFIG = String.format("%s/pkrc.json", Init.PK_CONFIG_HOME);
+	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
 	public final static String BIBLE_VERSION = "net";
 
 	// dynamic
@@ -83,7 +83,7 @@ public class Init {
 	public void appConfigurationSetup() {
 		System.out.println("\n");
 		// create configuration directory if it doesn't exist
-		File directory = new File(Init.PJ_CONFIG_HOME);
+		File directory = new File(Init.PK_CONFIG_HOME);
         if (!directory.exists()) {
             directory.mkdir();
 		} else {
@@ -91,17 +91,17 @@ public class Init {
 		}
 
 		// create configuration file if it doesn't exist
-		File f = new File(Init.PJ_CONFIG);
+		File f = new File(Init.PK_CONFIG);
         if (!f.exists() && !f.isDirectory()) {
 			// console message and initialization
 			System.out.println("Need to setup some of your configurations");
 			SystemConfiguration config = new SystemConfiguration();
-			config.setEntriesDir(SystemConfiguration.DEFAULT_PJ_ENTRIES_DIRECTORY);
+			config.setEntriesDir(SystemConfiguration.DEFAULT_PK_ENTRIES_DIRECTORY);
 			
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				// Serialize Java object to JSON file
-				mapper.writeValue(new File(Init.PJ_CONFIG), config);
+				mapper.writeValue(new File(Init.PK_CONFIG), config);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

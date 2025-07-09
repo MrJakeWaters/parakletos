@@ -1,9 +1,9 @@
-package org.prayer; 
+package org.parakletos; 
 
 public class SystemConfiguration {
 	// statics
-	public final static String PJ_CONFIG_HOME = String.format("%s/.config/pj/", System.getProperty("user.home"));
-	public final static String DEFAULT_PJ_ENTRIES_DIRECTORY = String.format("%s/.config/pj/entries", System.getProperty("user.home"));
+	public final static String PK_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
+	public final static String DEFAULT_PK_ENTRIES_DIRECTORY = String.format("%s/.config/pk/entries", System.getProperty("user.home"));
 	// attributes
 	public String entriesDir;
 

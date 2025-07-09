@@ -1,4 +1,4 @@
-package org.prayer;
+package org.parakletos;
 
 import java.io.File;
 import java.util.Map;
@@ -41,8 +41,8 @@ public class Command {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			// Serialize Java object to JSON file
-			// get journal entries location from pjrc file
-			this.configs = mapper.readValue(new File(Init.PJ_CONFIG), Map.class);
+			// get journal entries location from pkrc file
+			this.configs = mapper.readValue(new File(Init.PK_CONFIG), Map.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

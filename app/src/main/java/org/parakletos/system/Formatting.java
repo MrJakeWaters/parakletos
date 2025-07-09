@@ -1,6 +1,8 @@
-package org.prayer;
+package org.parakletos;
 
 public class Formatting {
+	public static final String BOLD_ON = "\033[1m";
+	public static final String BOLD_OFF = "\033[0m";
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
