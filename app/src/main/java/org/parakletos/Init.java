@@ -31,7 +31,6 @@ public class Init {
 
 		// check for configrations
 		this.appConfigurationSetup();
-
 	}
 
 	// setters
@@ -77,7 +76,7 @@ public class Init {
 		String chapter = node.get("chapter_verse").toString().split(":")[0].replaceAll("\"","");
 		String verse = node.get("chapter_verse").toString().split(":")[1].replaceAll("\"","");
 		String text = node.get("verses").get(Init.BIBLE_VERSION).get(chapter).get(verse).get("text").toString().replaceAll("\"","");
-		String bibleVerse = String.format("[%s %s:%s] %s", book_name, chapter, verse, text);
+		String bibleVerse = String.format("%s[%s %s:%s] %s%s", Formatting.BOLD_ON, book_name, chapter, verse, text, Formatting.BOLD_OFF);
 		return bibleVerse;
 	}
 	public void appConfigurationSetup() {
@@ -86,17 +85,12 @@ public class Init {
 		File directory = new File(Init.PK_CONFIG_HOME);
         if (!directory.exists()) {
             directory.mkdir();
-		} else {
-			System.out.println("Configuration Directory Setup");
 		}
 
 		// create configuration file if it doesn't exist
 		File f = new File(Init.PK_CONFIG);
         if (!f.exists() && !f.isDirectory()) {
-			// console message and initialization
-			System.out.println("Need to setup some of your configurations");
-			SystemConfiguration config = new SystemConfiguration();
-			config.setEntriesDir(SystemConfiguration.DEFAULT_PK_ENTRIES_DIRECTORY);
+			InitWorkflow config = new InitWorkflow();
 			
 			ObjectMapper mapper = new ObjectMapper();
 			try {
@@ -105,8 +99,6 @@ public class Init {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else {
-			System.out.println("Configuration File Already Setup");
 		}
 	}
 }

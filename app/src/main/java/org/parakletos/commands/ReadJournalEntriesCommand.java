@@ -44,7 +44,7 @@ public class ReadJournalEntriesCommand extends Command {
 						String start = String.valueOf(entry.get("entryStartTs"));
 						String end = String.valueOf(entry.get("entryEndTs"));
 						String duration = this.getFormattedDuration(start, end);
-
+				
 						// output formatting
 						String idOutput = String.format("\n%sentry %s", Formatting.ANSI_YELLOW, entry.get("entryId"));
 						String timestampOutput = String.format("\n%sDate: %s (%s)", Formatting.ANSI_WHITE, start, duration);
@@ -64,7 +64,6 @@ public class ReadJournalEntriesCommand extends Command {
 			// calculate and display duration
 			float fractional_minutes = (float) (dateFormat.parse(endTs).getTime() - dateFormat.parse(startTs).getTime())/(1000*60);
 			int minutes = (int) Math.floor(fractional_minutes);
-			System.out.println(minutes);
 			float seconds = (fractional_minutes - (float) minutes) * 60;
 			if (minutes == 0) {
 				return String.format("%s%s%s seconds%s%s", Formatting.BOLD_ON, Formatting.ANSI_PURPLE, (int) seconds, Formatting.ANSI_WHITE, Formatting.BOLD_OFF);

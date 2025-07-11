@@ -1,10 +1,20 @@
 package org.parakletos;
 
+// java
+import java.util.logging.Logger;
+import java.util.logging.LogManager;
+
 public class App {
-	public final static String WELCOME_MESSAGE = "Welcome to pk, a cli journaling application that help you organize and express your thought and prayers to Jesus.";
+	public final static String WELCOME_MESSAGE = "Welcome to parakletos, a cli journaling/prayer/bible study application to help you organize and express your thoughts and prayers to Jesus.";
 	public final static String EXIT_MESSAGE = "\nAll Done!";
     public String start(String[] args) {
 		System.out.println(App.WELCOME_MESSAGE);
+
+		// disable logs
+		LogManager.getLogManager().reset();
+		Logger globalLogger = Logger.getLogger(java.util.logging.Logger.GLOBAL_LOGGER_NAME);
+		globalLogger.setLevel(java.util.logging.Level.OFF);
+
 		// ensure configurations and setup and displays header and bible verse
 		Init init = new Init();
 

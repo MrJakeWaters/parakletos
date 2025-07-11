@@ -1,6 +1,6 @@
 package org.parakletos;
 
-// standard
+// java
 import java.io.File;
 import java.util.Map;
 import java.util.List;
@@ -18,6 +18,10 @@ import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericDatumWriter;
+// JLanguageTool
+import org.languagetool.JLanguageTool;
+import org.languagetool.rules.RuleMatch;
+import org.languagetool.Languages;
 
 public class AddJournalEntryCommand extends Command {
 	// https://kapilsreed.medium.com/apache-avro-demystified-66d80426c752
@@ -37,10 +41,12 @@ public class AddJournalEntryCommand extends Command {
 		this.entry = new Entry();
 		Workflow workflow = new Workflow();
 		String content = workflow.getUserInput("\nEntry: ");
-		
+
 		// set end timestamp and entry content
 		this.entry.setText(content);
 		this.entry.setEntryEndTs();
+		
+		AddJournalEntryWorkflow ajew = new AddJournalEntryWorkflow(this.entry);
 		
 		// ensure entries and partition of entry directories exist
 		String entriesDir = String.valueOf(this.configs.get("entriesDir"));
