@@ -43,6 +43,8 @@ public class Init {
 		}
 	}
 	public void setBibleVerse() {
+		BibleSuperSearchApi bible = new BibleSuperSearchApi();
+		System.out.println(bible.getBibleBooks());
 		try {
 			// converts InputStream to string through readAllBytes() method
 			// prayers.json was scraped from https://api.biblesupersearch.com/api?bible=net&search=prayer

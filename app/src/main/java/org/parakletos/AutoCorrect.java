@@ -21,7 +21,7 @@ public class AutoCorrect {
 	public String formattedCorrection;
 	public String languageCode;
 	public int standardReplacements;
-	private int i = 1 ;
+	private int i = 1;
 	private JLanguageTool lt;
 	private List<RuleMatch> matches;
 	// private
@@ -45,10 +45,9 @@ public class AutoCorrect {
 	}
 	public void setSpecificReplacements(String indices) {
 		this.correction = this.content;
-		int i = 0;
+		this.i = 1;
 		for (String index: indices.split(",")) {
 			this.standardMatchReplacement(this.matches.get(Integer.parseInt(index)-1), i);
-			i += 1;
 		}
 	}
 	public String getContent() {
@@ -73,21 +72,28 @@ public class AutoCorrect {
 		return !this.content.equals(this.correction);
 	}
 	public void standardMatchReplacement(RuleMatch match, int id) {
-		// indexes
-		int start = match.getFromPos();
-		int end = match.getToPos();
-	
-		// get percieved error
-		String error = this.content.substring(start, end);
+		try {
+			// indexes
+			int start = match.getFromPos();
+			int end = match.getToPos();
 		
-		// suggestion
-		String suggestion = match.getSuggestedReplacements().get(0);
-	
-		// replace suggestion
-		this.correction = this.correction.replaceFirst(error, suggestion);
-		this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.ANSI_CYAN, id));
-		this.formattedContent = this.formattedContent.replaceFirst(error, this.getFormatCorrection(error, Formatting.ANSI_RED));
-		this.i += 1;
+			// get percieved error
+			String error = this.content.substring(start, end);
+			
+			// suggestion
+			String suggestion = match.getSuggestedReplacements().get(0);
+			for (String suggest: match.getSuggestedReplacements()) {
+				System.out.println(String.format("(%s) %s", this.i, suggest));
+			}
+		
+			// replace suggestion
+			this.correction = this.correction.replaceFirst(error, suggestion);
+			this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.ANSI_CYAN, id));
+			this.formattedContent = this.formattedContent.replaceFirst(error, this.getFormatCorrection(error, Formatting.ANSI_RED));
+			this.i += 1;
+		} catch (java.lang.IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		}
 	}
 	public String getFormatCorrection(String match, String color) {
 		String formatOn = Formatting.BOLD_ON + color;

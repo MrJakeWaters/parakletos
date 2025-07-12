@@ -1,17 +1,21 @@
 package org.parakletos;
 
+// java
+import java.util.Arrays;
+
 public class CommandFactory {
 	public Command command;
+	public String function;
+	public String[] args;
 	public CommandFactory(String[] args) {
-		if ((args[0].equals("journal"))) {
-			if (args[1].equals("--add")) {
-				this.command = new AddJournalEntryCommand(args);
-			} else if (args[1].equals("--read")) {
-				this.command = new ReadJournalEntriesCommand(args);
-			}
-		} else {
-			this.command = new Command(args);
+		this.function = args[0];
+		this.args = Arrays.copyOfRange(args, 1, args.length);
+
+		// execution
+		if (this.function.equals("journal")) {
+			this.command = new JournalCommand(this.args);		
+		} else if (this.function.equals("bible")) {
+			System.out.println("Coming soon...");
 		}
-		this.command.displayExitMessage();
 	}
 }

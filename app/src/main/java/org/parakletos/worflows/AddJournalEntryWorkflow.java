@@ -15,7 +15,7 @@ public class AddJournalEntryWorkflow {
 		this.suggestions = new AutoCorrect(this.entry.getText(), "en-US");
 		
 		if (suggestions.hasErrors()) {
-			String errorPrompt = String.format("\nI've got a few suggestions for ya?\n\n\t%s\n\t%s\n\n", suggestions.getFormattedContent(), suggestions.getFormattedCorrection());
+			String errorPrompt = String.format("\nI've got a few suggestions for ya?\n\n --> %s\n --> %s\n\n", suggestions.getFormattedContent(), suggestions.getFormattedCorrection());
 			System.out.println(errorPrompt);
 			boolean useSuggestions = workflow.getUserInputBoolean("Do you want to make any corrections? [Y/n] ");
 	

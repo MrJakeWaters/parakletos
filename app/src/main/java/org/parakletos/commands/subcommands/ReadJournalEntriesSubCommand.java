@@ -18,8 +18,8 @@ import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.generic.GenericDatumReader;
 
 
-public class ReadJournalEntriesCommand extends Command {
-	public ReadJournalEntriesCommand (String[] args) {
+public class ReadJournalEntriesSubCommand extends SubCommand {
+	public ReadJournalEntriesSubCommand (String[] args) {
 		super(args);
 		this.setCommand("read-journal-entries");
 		this.setDescription("reads your written journal entries");

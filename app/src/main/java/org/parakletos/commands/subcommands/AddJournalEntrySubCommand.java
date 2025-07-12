@@ -23,10 +23,10 @@ import org.languagetool.JLanguageTool;
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.Languages;
 
-public class AddJournalEntryCommand extends Command {
+public class AddJournalEntrySubCommand extends SubCommand {
 	// https://kapilsreed.medium.com/apache-avro-demystified-66d80426c752
 	public Entry entry;
-	public AddJournalEntryCommand(String[] args) {
+	public AddJournalEntrySubCommand(String[] args) {
 		// inhert
 		super(args);
 		
