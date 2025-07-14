@@ -1,9 +1,11 @@
 package org.parakletos; 
 
+// java
 import java.io.File;
 import java.util.Map;
 import java.util.Random;
 import java.io.IOException;
+// jackson
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,7 +15,6 @@ public class Init {
 	public final static String PK_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
 	public final static String PK_CONFIG = String.format("%s/pkrc.json", Init.PK_CONFIG_HOME);
 	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
-	public final static String BIBLE_VERSION = "net";
 
 	// dynamic
 	public String header;
@@ -24,10 +25,6 @@ public class Init {
 		// display application header
 		this.setHeader();
 		System.out.println(this.getHeader());
-
-		// display bible
-		this.setBibleVerse();
-		System.out.println(this.getBibleVerse());
 
 		// check for configrations
 		this.appConfigurationSetup();
@@ -42,47 +39,13 @@ public class Init {
 			e.printStackTrace();
 		}
 	}
-	public void setBibleVerse() {
-		BibleSuperSearchApi bible = new BibleSuperSearchApi();
-		System.out.println(bible.getBibleBooks());
-		try {
-			// converts InputStream to string through readAllBytes() method
-			// prayers.json was scraped from https://api.biblesupersearch.com/api?bible=net&search=prayer
-			ObjectMapper objectMapper = new ObjectMapper();
-			String biblePrayerVersesJson = new String(getClass().getClassLoader().getResourceAsStream("prayers.json").readAllBytes());
-
-			// get random verse within json prayer array objects to display
-			JsonNode biblePrayerVerses = objectMapper.readTree(biblePrayerVersesJson).get("results");
-			int n = new Random().nextInt(biblePrayerVerses.size()-1);
-
-			// set random verse
-			this.bibleVerse = this.getVerseText(biblePrayerVerses.get(n));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	// getters
 	public String getHeader() {
 		return this.header; 
 	}
-	public String getBibleVerse() {
-		return this.bibleVerse;
-	}
 	
-	// utility operations
-	public String getVerseText(JsonNode node) {
-		// converts JsonNode format of Bible Verse to string to display
-		// see resource/prayers.json to see format
-		String book_name = node.get("book_short").toString().replaceAll("\"","");
-		String chapter = node.get("chapter_verse").toString().split(":")[0].replaceAll("\"","");
-		String verse = node.get("chapter_verse").toString().split(":")[1].replaceAll("\"","");
-		String text = node.get("verses").get(Init.BIBLE_VERSION).get(chapter).get(verse).get("text").toString().replaceAll("\"","");
-		String bibleVerse = String.format("%s[%s %s:%s] %s%s", Formatting.BOLD_ON, book_name, chapter, verse, text, Formatting.BOLD_OFF);
-		return bibleVerse;
-	}
 	public void appConfigurationSetup() {
-		System.out.println("\n");
 		// create configuration directory if it doesn't exist
 		File directory = new File(Init.PK_CONFIG_HOME);
         if (!directory.exists()) {

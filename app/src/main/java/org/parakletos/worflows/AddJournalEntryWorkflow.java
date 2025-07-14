@@ -31,12 +31,14 @@ public class AddJournalEntryWorkflow {
 				// replace suggestions
 				if (!corrections.equals("")) {
 					suggestions.setSpecificReplacements(corrections);
+					
 				}
+				// update entry with suggestions
+				this.entry.setText(suggestions.getCorrection());
 			}
 			
 			// Display and update entry
-			System.out.println(String.format("\nCommitting Updated Entry: %s", suggestions.getCorrection()));
-			this.entry.setText(suggestions.getCorrection());
+			System.out.println(String.format("\n%sCommitting Entry%s: %s", Formatting.BOLD_ON, Formatting.BOLD_OFF, this.entry.getText()));
 		}
 	}
 	public boolean isValidCorrection(String input) {

@@ -33,11 +33,14 @@ public class AutoCorrect {
 		this.formattedCorrection = content;
 		this.languageCode = languageCode;
 		this.lt = new JLanguageTool(Languages.getLanguageForShortCode(this.languageCode));
+		System.out.println("\n");
 		try {
 			this.matches = this.lt.check(this.content);
 			this.standardReplacements = this.matches.size();
 			for (RuleMatch match: this.matches) {
-				this.standardMatchReplacement(match, this.i);
+				if (match.getSuggestedReplacements().size() > 0) {
+					this.standardMatchReplacement(match, this.i);
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,7 +50,7 @@ public class AutoCorrect {
 		this.correction = this.content;
 		this.i = 1;
 		for (String index: indices.split(",")) {
-			this.standardMatchReplacement(this.matches.get(Integer.parseInt(index)-1), i);
+			this.standardMatchReplacement(this.matches.get(Integer.parseInt(index)-1), this.i);
 		}
 	}
 	public String getContent() {
@@ -82,13 +85,13 @@ public class AutoCorrect {
 			
 			// suggestion
 			String suggestion = match.getSuggestedReplacements().get(0);
-			for (String suggest: match.getSuggestedReplacements()) {
-				System.out.println(String.format("(%s) %s", this.i, suggest));
-			}
+		
+			// debug
+			System.out.println(String.format("%s--> %s, (%s,%s)", error, suggestion, start, end));
 		
 			// replace suggestion
 			this.correction = this.correction.replaceFirst(error, suggestion);
-			this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.ANSI_CYAN, id));
+			this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.ANSI_CYAN, this.i));
 			this.formattedContent = this.formattedContent.replaceFirst(error, this.getFormatCorrection(error, Formatting.ANSI_RED));
 			this.i += 1;
 		} catch (java.lang.IndexOutOfBoundsException e) {

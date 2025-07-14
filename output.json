@@ -1,0 +1,41 @@
+{
+  "hash": "xv1pu4f727",
+  "disambiguation": [],
+  "strongs": [],
+  "paging": [],
+  "errors": [],
+  "error_level": 0,
+  "results": [
+    {
+      "book_id": 45,
+      "book_name": "Romans",
+      "book_short": "Rom",
+      "book_raw": "Rom",
+      "chapter_verse": "4:1",
+      "chapter_verse_raw": null,
+      "verse_index": {
+        "4": [
+          1
+        ]
+      },
+      "verses": {
+        "kjv": {
+          "4": {
+            "1": {
+              "id": 28024,
+              "book": 45,
+              "chapter": 4,
+              "verse": 1,
+              "text": "¶ What shall we say then that Abraham our father, as pertaining to the flesh, hath found?",
+              "italics": "",
+              "claimed": true
+            }
+          }
+        }
+      },
+      "verses_count": 1,
+      "single_verse": true,
+      "nav": []
+    }
+  ]
+}
