@@ -9,9 +9,12 @@ public class JournalCommand extends Command {
 
 		// execution
 		if (this.function.equals("--add")) {
-			this.subCommand = new AddJournalEntrySubCommand(this.args);
+			// show random bible verse
+			new BibleSubCommand().showRandomBibleVerse();
+			AddJournalEntrySubCommand subCommand = new AddJournalEntrySubCommand(this.args);
 		} else if (this.function.equals("--read")) {
-			this.subCommand = new ReadJournalEntriesSubCommand(this.args);
+			ReadJournalEntriesSubCommand subCommand = new ReadJournalEntriesSubCommand(this.args);
+			subCommand.getJournalContent().print();
 		} else {
 			System.out.println("No command specified");
 		}

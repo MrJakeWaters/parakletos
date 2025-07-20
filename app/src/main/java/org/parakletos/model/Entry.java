@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 
 public class Entry {
 	public String entryStartTs; 
+	public String prayerId;
 	public String entryEndTs; 
 	public String text;
 	public String entryId;
@@ -14,9 +15,13 @@ public class Entry {
 	public Entry() {
 		this.entryId = UUID.randomUUID().toString();
 		this.entryStartTs = Instant.now().truncatedTo(ChronoUnit.SECONDS).toString().replace("T"," ").replace("Z","");
+		this.prayerId = null;
 	}
 
 	// getters
+	public String getPrayerId() {
+		return this.prayerId;
+	}
 	public String getText() {
 		return this.text;
 	}
@@ -36,6 +41,9 @@ public class Entry {
 	}
 	public void setText(String text) {
 		this.text = text;
+	}
+	public void setPrayerId(String prayerId) {
+		this.prayerId = prayerId;
 	}
 }
 

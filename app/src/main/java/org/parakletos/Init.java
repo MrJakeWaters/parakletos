@@ -14,7 +14,6 @@ public class Init {
 	// global statics
 	public final static String PK_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
 	public final static String PK_CONFIG = String.format("%s/pkrc.json", Init.PK_CONFIG_HOME);
-	public final static String PRAYER_CONFIG_HOME = String.format("%s/.config/pk/", System.getProperty("user.home"));
 
 	// dynamic
 	public String header;
@@ -56,7 +55,6 @@ public class Init {
 		File f = new File(Init.PK_CONFIG);
         if (!f.exists() && !f.isDirectory()) {
 			InitWorkflow config = new InitWorkflow();
-			
 			ObjectMapper mapper = new ObjectMapper();
 			try {
 				// Serialize Java object to JSON file

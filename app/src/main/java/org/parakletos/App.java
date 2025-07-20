@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 import java.util.logging.LogManager;
 
 public class App {
-	public final static String WELCOME_MESSAGE = "Welcome to parakletos, a cli journaling/prayer/bible study application to help you organize and express your thoughts and prayers to Jesus.";
+	public final static String WELCOME_MESSAGE = "Glory to God in the highest and peace to his people on earth";
 	public final static String EXIT_MESSAGE = "\nAll Done!";
     public String start(String[] args) {
 		System.out.println(App.WELCOME_MESSAGE);

@@ -17,4 +17,12 @@ public class BibleSuperBooks {
 		int randomIndex = (new Random()).nextInt(this.results.size()-1);
 		return this.results.get(randomIndex);
 	}
+	public BibleSuperBook getBook(String bookName) {
+		for (BibleSuperBook book: this.results) {
+			if (book.getName().equals(bookName) || book.getShortname().equals(bookName)) {
+				return book;
+			} 
+		}
+		return new BibleSuperBook();
+	}
 }

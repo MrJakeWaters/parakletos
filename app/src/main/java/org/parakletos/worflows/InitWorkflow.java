@@ -19,7 +19,7 @@ public class InitWorkflow {
 		// get bible version
 		this.bibleVersionMap = new HashMap<>();
 		String bibleVersionId = workflow.getUserInput(this.bibleVersionsPrompt());
-		this.bibleVersion = this.bibleVersionMap.get(bibleVersionId);
+		this.bibleVersion = this.bibleVersionMap.get(bibleVersionId).toLowerCase();
 
 		// set default write directory
 		this.entriesDir = SystemConfiguration.DEFAULT_PK_ENTRIES_DIRECTORY;

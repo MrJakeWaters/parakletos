@@ -15,7 +15,9 @@ public class CommandFactory {
 		if (this.function.equals("journal")) {
 			this.command = new JournalCommand(this.args);		
 		} else if (this.function.equals("bible")) {
-			System.out.println("Coming soon...");
+			this.command = new BibleCommand(this.args);		
+		} else if (this.function.equals("prayer")) {
+			this.command = new PrayerCommand(this.args);
 		}
 	}
 }

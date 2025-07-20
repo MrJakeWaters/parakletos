@@ -40,7 +40,36 @@ public class BibleSuperSearchApi {
 			return "";
 		}
 	}
+	public String getBibleBookChapterReference(String bookName, int chapter) {
+			try {
+				String bibleBooksJson = new String(getClass().getClassLoader().getResourceAsStream("bibleBooks.json").readAllBytes());
+				BibleSuperBooks books = mapper.readValue(bibleBooksJson, BibleSuperBooks.class);
+				// get specific book
+				BibleSuperBook specificBook = books.getBook(bookName);
+				return specificBook.getFullChapterReference(chapter);
+			} catch (IOException e) {
+				e.printStackTrace();	
+				return "";
+			}
+	}
+	public String getRandomBibleChapterReference() {
+		try {
+			// return client
+			String bibleBooksJson = new String(getClass().getClassLoader().getResourceAsStream("bibleBooks.json").readAllBytes());
+			BibleSuperBooks books = mapper.readValue(bibleBooksJson, BibleSuperBooks.class);
+			// get random book
+			BibleSuperBook randomBook = books.getRandomBook();
+			return randomBook.getRandomFullChapterReference();
+		} catch (IOException e) {
+			
+			// handling exception
+			e.printStackTrace();
+			return "";
+		}
+	}
+
 	public String getBibleVerse(String bibleVerseReference) {
+		// taking reference to bible verse(s) and return the actual verse content
 		try {
 			Map<String, String> configs = mapper.readValue(new File(Init.PK_CONFIG), Map.class);
 			String bibleVersion = configs.get("bibleVersion");
@@ -50,9 +79,15 @@ public class BibleSuperSearchApi {
 				.build();
 			String responseBody = client.send(request, BodyHandlers.ofString()).body();
 			JsonNode root = mapper.readTree(responseBody);
+			String book = root.path("results").get(0).path("book_short").asText();
 			String chapter = root.path("results").get(0).path("chapter_verse").asText().split(":")[0];
-			String verse = root.path("results").get(0).path("chapter_verse").asText().split(":")[1];
-			return root.path("results").get(0).path("verses").path(bibleVersion).path(chapter).path(verse).path("text").asText();
+			String output = String.format("%s[%s %s] %s%s\n", Formatting.BOLD_ON, book, chapter, bibleVersion.toUpperCase(), Formatting.BOLD_OFF);
+			for (JsonNode index: root.path("results").get(0).path("verse_index").path(chapter)) {
+				String i = index.toString();
+				String verse = root.path("results").get(0).path("verses").path(bibleVersion).path(chapter).path(i).path("text").asText();
+				output = String.format("%s%s(%s%s%s%s%s)%s %s", output, Formatting.YELLOW, Formatting.WHITE, Formatting.BOLD_ON, i, Formatting.BOLD_OFF, Formatting.YELLOW, Formatting.WHITE, verse);
+			}
+			return output;
 		} catch (IOException e) {
 			
 			// handling exception

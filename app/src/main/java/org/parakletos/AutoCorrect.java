@@ -91,8 +91,8 @@ public class AutoCorrect {
 		
 			// replace suggestion
 			this.correction = this.correction.replaceFirst(error, suggestion);
-			this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.ANSI_CYAN, this.i));
-			this.formattedContent = this.formattedContent.replaceFirst(error, this.getFormatCorrection(error, Formatting.ANSI_RED));
+			this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.CYAN, this.i));
+			this.formattedContent = this.formattedContent.replaceFirst(error, this.getFormatCorrection(error, Formatting.RED));
 			this.i += 1;
 		} catch (java.lang.IndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -100,14 +100,14 @@ public class AutoCorrect {
 	}
 	public String getFormatCorrection(String match, String color) {
 		String formatOn = Formatting.BOLD_ON + color;
-		String formatOff = Formatting.BOLD_OFF + Formatting.ANSI_WHITE;
+		String formatOff = Formatting.BOLD_OFF + Formatting.WHITE;
 		String replacement = String.format("%s%s%s", formatOn, match, formatOff);
 		return replacement;
 	}
 	public String getFormatCorrection(String match, String color, int id) {
-		String idFormat = String.format("%s(%s%s%s)%s", Formatting.ANSI_YELLOW, Formatting.ANSI_WHITE, id, Formatting.ANSI_YELLOW, Formatting.ANSI_WHITE);
+		String idFormat = String.format("%s(%s%s%s)%s", Formatting.YELLOW, Formatting.WHITE, id, Formatting.YELLOW, Formatting.WHITE);
 		String formatOn = Formatting.BOLD_ON + color;
-		String formatOff = Formatting.BOLD_OFF + Formatting.ANSI_WHITE;
+		String formatOff = Formatting.BOLD_OFF + Formatting.WHITE;
 		String replacement = String.format("%s%s%s%s", idFormat, formatOn, match, formatOff);
 		return replacement;
 	}
