@@ -5,5 +5,6 @@ public class Bibles {
 	public static final String BSB = "bsb";
 	public static final String NET = "net";
 	public static final String WEB = "web";
+	public static final String KJV = "kjv";
 	public Bibles() {}
 }

@@ -1,5 +1,8 @@
 package org.parakletos;
 
+// java
+import java.util.Arrays;
+
 public class BibleCommand extends Command {
 	public BibleSubCommand bibleUtil = new BibleSubCommand();
 	public BibleCommand(String[] args) {
@@ -11,8 +14,8 @@ public class BibleCommand extends Command {
 		} else if (this.function.equals("--random-chapter")) {
 			bibleUtil.showRandomBibleChapter();
 		} else if (this.function.equals("--get-chapter")) {
-			String book = this.args[0];
-			int chapter = Integer.parseInt(this.args[1]);
+			String book = String.join(" ", Arrays.copyOfRange(this.args, 0, this.args.length-1));
+			int chapter = Integer.parseInt(this.args[this.args.length-1]);
 			bibleUtil.showBibleChapter(book, chapter);
 		}
 	}

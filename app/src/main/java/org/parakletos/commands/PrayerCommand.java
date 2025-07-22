@@ -11,7 +11,6 @@ public class PrayerCommand extends Command {
 
 		// execution
 		if (this.function.equals("--add")) {
-			// show random bible verse
 			AddPrayerSubCommand subCommand = new AddPrayerSubCommand(this.args, this.prayerDir);
 		} else if (this.function.equals("--read")) {
 			ReadPrayerListSubCommand subCommand = new ReadPrayerListSubCommand(this.args, this.prayerDir);
