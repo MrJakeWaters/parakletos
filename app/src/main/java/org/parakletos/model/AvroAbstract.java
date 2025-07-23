@@ -25,8 +25,7 @@ public class AvroAbstract<T> {
 			for (Field field: this.object.getClass().getDeclaredFields()) {
 				field.setAccessible(true);
 				String key = field.getName();
-				String value = String.valueOf(field.get(this.object));
-				this.map.put(key, value);
+				this.map.put(key, field.get(this.object));
 			}	
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();

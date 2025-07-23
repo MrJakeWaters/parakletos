@@ -17,6 +17,9 @@ public class BibleCommand extends Command {
 			String book = String.join(" ", Arrays.copyOfRange(this.args, 0, this.args.length-1));
 			int chapter = Integer.parseInt(this.args[this.args.length-1]);
 			bibleUtil.showBibleChapter(book, chapter);
+		} else if (this.function.equals("--daily-chapter")) {
+			// save and retreive daily chapter for reading
+			bibleUtil.getDailyBibleChapter();
 		}
 	}
 }
