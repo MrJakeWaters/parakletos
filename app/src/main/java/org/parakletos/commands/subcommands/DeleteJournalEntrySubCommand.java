@@ -20,12 +20,10 @@ public class DeleteJournalEntrySubCommand extends SubCommand {
 		}
 	}
 	public File getFile(String filename) {
-		for (File f1: new File(String.valueOf(this.configs.get("entriesDir"))).listFiles()) {
-			for (File f2: new File(f1.getAbsolutePath()).listFiles()) {
-				if (f2.getName().equals(filename)) {
-					f2.delete();
-					return f2;
-				}
+		for (File f: new File(String.valueOf(this.configs.get("entriesDir"))).listFiles()) {
+			File test = new File(String.format("%s/%s", f.getAbsolutePath(), filename));
+			if (test.exists()) {
+				return test;	
 			}
 		}
 		return new File("DoesNotExist");
