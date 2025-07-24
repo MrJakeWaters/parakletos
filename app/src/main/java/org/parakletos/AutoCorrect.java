@@ -86,9 +86,6 @@ public class AutoCorrect {
 			// suggestion
 			String suggestion = match.getSuggestedReplacements().get(0);
 		
-			// debug
-			System.out.println(String.format("%s--> %s, (%s,%s)", error, suggestion, start, end));
-		
 			// replace suggestion
 			this.correction = this.correction.replaceFirst(error, suggestion);
 			this.formattedCorrection = this.formattedCorrection.replaceFirst(error, this.getFormatCorrection(suggestion, Formatting.CYAN, this.i));

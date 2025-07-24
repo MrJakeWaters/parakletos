@@ -15,6 +15,8 @@ public class JournalCommand extends Command {
 		} else if (this.function.equals("--read")) {
 			ReadJournalEntriesSubCommand subCommand = new ReadJournalEntriesSubCommand(this.args);
 			subCommand.getJournalContent().print();
+		} else if (this.function.equals("--delete")) {
+			DeleteJournalEntrySubCommand subCommand = new DeleteJournalEntrySubCommand(this.args);
 		} else {
 			System.out.println("No command specified");
 		}

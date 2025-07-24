@@ -1,11 +1,15 @@
 package org.parakletos;
 
+// java
 import java.util.UUID;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+// avro
+import org.apache.avro.reflect.Nullable;
 
 public class Entry {
 	public String entryStartTs; 
+	@Nullable
 	public String prayerId;
 	public String entryEndTs; 
 	public String text;
