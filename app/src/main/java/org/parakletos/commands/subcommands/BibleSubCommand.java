@@ -17,21 +17,31 @@ public class BibleSubCommand {
 	public BibleSuperSearchApi functions;
 	public BibleSubCommand () {
 		this.functions = new BibleSuperSearchApi();	
+
+	}
+	public void showRandomBibleMessage() {
+		String verseReference = this.functions.getRandomBibleMessage();
+		String content = this.functions.getBibleVerse(verseReference.replace(" ", "%20"));
+		System.out.println(content);
+
 	}
 	public void showRandomBibleVerse() {
 		String verseReference = this.functions.getRandomBibleVerseReference();
 		String content = this.functions.getBibleVerse(verseReference.replace(" ", "%20"));
 		System.out.println(content);
+
 	}
 	public void showRandomBibleChapter() {
 		String verseReference = this.functions.getRandomBibleChapterReference();
 		String content = this.functions.getBibleVerse(verseReference.replace(" ", "%20"));
 		System.out.println(content);
+
 	}
 	public void showBibleChapter(String book, int chapter) {
 		String verseReference = this.functions.getBibleBookChapterReference(book, chapter);
 		String content = this.functions.getBibleVerse(verseReference.replace(" ", "%20"));
 		System.out.println(content);
+
 	}
 	public void getDailyBibleChapter() {
 		// check if a daily bible chapter exists
@@ -56,7 +66,6 @@ public class BibleSubCommand {
 			}
 
 		} else  {
-
 			// get chapter content
 			String reference = this.functions.getRandomBibleChapterReference();
 			String content = this.functions.getBibleVerse(reference.replace(" ", "%20"));
@@ -75,6 +84,7 @@ public class BibleSubCommand {
 			Avro avro = new Avro();
 			avro.write(dailyChapterFile, daily);
 			System.out.println(content);
+
 		}
 	}  
 }

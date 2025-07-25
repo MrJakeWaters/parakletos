@@ -10,7 +10,7 @@ public class JournalCommand extends Command {
 		// execution
 		if (this.function.equals("--add")) {
 			// show random bible verse
-			new BibleSubCommand().showRandomBibleVerse();
+			new BibleSubCommand().showRandomBibleMessage();
 			AddJournalEntrySubCommand subCommand = new AddJournalEntrySubCommand(this.args);
 		} else if (this.function.equals("--read")) {
 			ReadJournalEntriesSubCommand subCommand = new ReadJournalEntriesSubCommand(this.args);

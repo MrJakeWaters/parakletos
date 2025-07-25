@@ -23,6 +23,24 @@ public class BibleSuperSearchApi {
 	public ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	public BibleSuperSearchApi() {}
 
+	public String getRandomBibleMessage() {
+		try {
+			String bibleBooksJson = new String(getClass().getClassLoader().getResourceAsStream("bibleBooks.json").readAllBytes());
+			BibleSuperBooks books = mapper.readValue(bibleBooksJson, BibleSuperBooks.class);
+			BibleSuperBook randomBook = books.getRandomBook();
+			int chapter = randomBook.getRandomChapter();
+			int startingVerse = randomBook.getRandomVerse(chapter);
+			int endingVerse = randomBook.getRandomVerse(chapter, startingVerse);
+			String output = String.format("%s %s:%s-%s", randomBook.getShortname(), chapter, startingVerse, endingVerse);
+			return output;
+
+		} catch (IOException e) {
+			// handling exception
+			e.printStackTrace();
+			return "";
+
+		}
+	}
 	public String getRandomBibleVerseReference() {
 		try {
 			// return client
@@ -33,11 +51,12 @@ public class BibleSuperSearchApi {
 			int verse = randomBook.getRandomVerse(chapter);
 			String output = String.format("%s %s:%s", randomBook.getShortname(), chapter, verse);
 			return output;
+
 		} catch (IOException e) {
-			
 			// handling exception
 			e.printStackTrace();
 			return "";
+
 		}
 	}
 	public String getBibleBookChapterReference(String bookName, int chapter) {
@@ -47,10 +66,13 @@ public class BibleSuperSearchApi {
 				// get specific book
 				BibleSuperBook specificBook = books.getBook(bookName);
 				return specificBook.getFullChapterReference(chapter);
+
 			} catch (IOException e) {
 				e.printStackTrace();	
 				return "";
+
 			}
+
 	}
 	public String getRandomBibleChapterReference() {
 		try {
@@ -60,11 +82,12 @@ public class BibleSuperSearchApi {
 			// get random book
 			BibleSuperBook randomBook = books.getRandomBook();
 			return randomBook.getRandomFullChapterReference();
+
 		} catch (IOException e) {
-			
 			// handling exception
 			e.printStackTrace();
 			return "";
+
 		}
 	}
 
@@ -86,20 +109,21 @@ public class BibleSuperSearchApi {
 				String i = index.toString();
 				String verse = root.path("results").get(0).path("verses").path(bibleVersion).path(chapter).path(i).path("text").asText();
 				output = String.format("%s%s(%s%s%s%s%s)%s %s", output, Formatting.YELLOW, Formatting.WHITE, Formatting.BOLD_ON, i, Formatting.BOLD_OFF, Formatting.YELLOW, Formatting.WHITE, verse);
+
 			}
 			return output;
 		} catch (IOException e) {
-			
 			// handling exception
 			System.out.println(bibleVerseReference);
 			e.printStackTrace();
 			return "";
-		} catch (InterruptedException e) {
 
+		} catch (InterruptedException e) {
 			// handling exception
 			System.out.println(bibleVerseReference);
 			e.printStackTrace();
 			return "";
+
 		}
 	}
 }

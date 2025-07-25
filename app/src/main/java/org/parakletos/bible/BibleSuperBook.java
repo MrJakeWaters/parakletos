@@ -35,6 +35,11 @@ public class BibleSuperBook {
 		int randomIndex = (new Random()).nextInt(maxVerseNum)+1; // ensure verse return is > 0;
 		return randomIndex;
 	}
+	public int getRandomVerse(int chapter, int minVerseNum) {
+		int maxVerseNum = (int) this.chapter_verses.get(Integer.toString(chapter)); // get max verse number from object, can reference bibleBooks.json in resources folder
+		int randomIndex = (new Random()).nextInt(maxVerseNum - minVerseNum + 2) + minVerseNum;
+		return randomIndex;
+	}
 	public String getRandomFullChapterReference() {
 		// return reference string (for api call) for the entire chapter
 		// this consists of the first verse to the last

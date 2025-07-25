@@ -28,6 +28,9 @@ public class BibleCommand extends Command {
 			// save and retreive daily chapter for reading
 			bibleUtil.getDailyBibleChapter();
 
+		} else if (this.function.equals("--random-message")) {
+			bibleUtil.showRandomBibleMessage();
+
 		} else if (this.function.equals("--set-version")) {
 			InitWorkflow config = new InitWorkflow();
 			ObjectMapper mapper = new ObjectMapper();
