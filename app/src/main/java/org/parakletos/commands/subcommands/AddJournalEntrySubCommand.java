@@ -44,7 +44,8 @@ public class AddJournalEntrySubCommand extends SubCommand {
 		this.entry.setEntryEndTs();
 		
 		AddJournalEntryWorkflow ajew = new AddJournalEntryWorkflow(this.entry);
-		// must be unique
+
+		// must be unique so using the entryid uuid
 		String fileName = String.format("%s/%s/%s.avro", this.configs.get("entriesDir"), this.executionDate, this.entry.getEntryId());
 		
 		// create writer and ensure path exists

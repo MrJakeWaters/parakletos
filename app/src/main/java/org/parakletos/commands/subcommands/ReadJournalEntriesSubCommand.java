@@ -2,21 +2,15 @@ package org.parakletos;
 
 // standard
 import java.io.File;
+import java.util.List;
 import java.lang.Math;
 import java.util.Date;
 import java.util.TimeZone;
 import java.time.Duration;
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 // avro
-import org.apache.avro.Schema;
-import org.apache.avro.io.DatumReader;
-import org.apache.avro.reflect.ReflectData;
-import org.apache.avro.file.DataFileReader;
-import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
-import org.apache.avro.generic.GenericDatumReader;
 
 
 public class ReadJournalEntriesSubCommand extends SubCommand {
@@ -40,27 +34,34 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 			if (f.isDirectory()) {
 				this.setEntries(f.getAbsolutePath());
 			} else {
-				Schema schema = ReflectData.get().getSchema(Entry.class);
-				DatumReader<GenericRecord> reader = new GenericDatumReader<GenericRecord>(schema);
-				try {
-					DataFileReader<GenericRecord> dataFileReader = new DataFileReader<GenericRecord>(new File(f.getAbsolutePath()), reader);
-					GenericRecord entry = null;
-					while (dataFileReader.hasNext()) {
-						entry = dataFileReader.next(entry);
-						String start = String.valueOf(entry.get("entryStartTs"));
-						String end = String.valueOf(entry.get("entryEndTs"));
-						String duration = this.getFormattedDuration(start, end);
-				
-						// output formatting
-						String idOutput = String.format("\n%sentry %s", Formatting.YELLOW, entry.get("entryId"));
-						String timestampOutput = String.format("\n%sDate: %s (%s)", Formatting.WHITE, this.formatEntryTimestamp(start), duration);
-						String textOutput = String.format("\n\n  %s%s", Formatting.CYAN, entry.get("text"));
-						String entryContent = String.format("%s%s%s%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET);
-						this.journalContent.addContent(entryContent);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
+				Avro avro = new Avro();
+				List<GenericRecord> entryRecord = avro.getRecords(f.getAbsolutePath(), Entry.class);
+				GenericRecord entry = entryRecord.get(0);
+		
+				String entryContent = "";
+				String start = String.valueOf(entry.get("entryStartTs"));
+				String end = String.valueOf(entry.get("entryEndTs"));
+				String duration = this.getFormattedDuration(start, end);
+		
+				// output formatting
+				String idOutput = String.format("\n%sentry %s", Formatting.YELLOW, entry.get("entryId"));
+				String timestampOutput = String.format("\n%sDate: %s (%s)", Formatting.WHITE, this.formatEntryTimestamp(start), duration);
+				String textOutput = String.format("\n\n  %s%s", Formatting.CYAN, entry.get("text"));
+
+				// add prayerId details if it exists
+				if (entry.get("prayerId") != null) {
+					// get prayer record
+					String prayerFile = String.format("%s/prayer-list/%s.avro", Init.PK_CONFIG_HOME, entry.get("prayerId")).replaceAll("//","/");
+					List<GenericRecord> prayerRecord = avro.getRecords(prayerFile, Prayer.class);
+					GenericRecord prayer = prayerRecord.get(0);
+
+					// format prayer id and content in output
+					String prayerContent = String.format("%s%s%s%s%s", Formatting.ITALICS, Formatting.BLUE, Formatting.BOLD_ON, prayer.get("content"), Formatting.RESET);
+					entryContent = String.format("%s%s%s%s\n\t%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET, prayerContent);
+				} else {
+					entryContent = String.format("%s%s%s%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET);
 				}
+				this.journalContent.addContent(entryContent);
 			}
 		}
 	}

@@ -18,15 +18,20 @@ import org.apache.avro.generic.GenericDatumReader;
 
 public class ReadPrayerListSubCommand extends SubCommand {
 	public String prayerDir;
+	public PaginatedDisplay prayerContent;
 	public ReadPrayerListSubCommand(String args[], String prayerDir) {
 		super(args);
 		this.prayerDir = prayerDir;
+		this.prayerContent = new PaginatedDisplay("");
 		this.setCommand("read-prayer-list");
 		this.setDescription("reads list of people and things to prayer for");
 		this.run();
 	}
 	public boolean prayerDirExists() {
 		return !(new File(this.prayerDir)).isDirectory();
+	}
+	public PaginatedDisplay getPrayerContent() {
+		return this.prayerContent;
 	}
 	public String formatPrayerTimestamp(String ts) {
 		try {
@@ -64,7 +69,7 @@ public class ReadPrayerListSubCommand extends SubCommand {
 						String timestampOutput = String.format("\n%s%sDate: %s%s", Formatting.WHITE, Formatting.ITALICS, ts, Formatting.RESET);
 						String textOutput = String.format("\n\n  %s%s", Formatting.CYAN, prayer.get("content"));
 						String content = String.format("%s%s%s%s\n", idOutput, entity, textOutput, Formatting.RESET);
-						System.out.println(content);
+						this.prayerContent.addContent(content);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();

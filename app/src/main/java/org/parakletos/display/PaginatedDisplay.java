@@ -1,11 +1,13 @@
 package org.parakletos;
 
 // java
-import java.util.List;
-import java.io.IOException;
 import java.util.ArrayList;
+// system hooks
+import lc.kra.system.keyboard.GlobalKeyboardHook;
+import lc.kra.system.keyboard.event.GlobalKeyAdapter;
+import lc.kra.system.keyboard.event.GlobalKeyEvent;
 // apache common
-import org.apache.commons.lang3.text.WordUtils;
+// import org.apache.commons.lang3.text.WordUtils;
 
 public class PaginatedDisplay {
 	// https://github.com/akullpp/awesome-java#cli
@@ -21,8 +23,6 @@ public class PaginatedDisplay {
 		this.content = String.format("%s%s", this.content, line);
 	}
 	public void print() {
-		for (String line: this.content.split("\n")) {
-			System.out.println(WordUtils.wrap(line, 90));
-		}
+		System.out.println(this.content);
 	}
 }

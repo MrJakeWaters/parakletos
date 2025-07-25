@@ -16,6 +16,7 @@ public class DeleteJournalEntrySubCommand extends SubCommand {
 		if (f.getName().equals("DoesNotExist")) {
 			System.out.println(String.format("No such entry found: %s", this.entryId));	
 		} else {
+			f.delete();
 			System.out.println(String.format("Entry Deleted: %s", this.entryId));	
 		}
 	}
