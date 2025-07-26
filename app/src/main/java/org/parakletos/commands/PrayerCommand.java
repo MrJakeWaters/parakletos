@@ -17,11 +17,15 @@ public class PrayerCommand extends Command {
 
 		} else if (this.function.equals("--read")) {
 			// set to active or archived prayer directory
-			String prayerDir = "";
-			if (this.args[0].equals("--archive")) {
-				prayerDir = this.archivePrayerDir;	
-			} else {
-				prayerDir = this.activePrayerDir;	
+			String prayerDir = this.activePrayerDir;
+			try {
+				if (this.args[0].equals("--archive")) {
+					prayerDir = this.archivePrayerDir;	
+				}
+
+			} catch (java.lang.ArrayIndexOutOfBoundsException e) {
+				;	
+
 			}
 
 			// read prayers
