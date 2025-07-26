@@ -6,6 +6,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 // avro
 import org.apache.avro.reflect.Nullable;
+import org.apache.avro.generic.GenericRecord;
 
 public class Entry {
 	public String entryStartTs; 
@@ -20,6 +21,13 @@ public class Entry {
 		this.entryId = UUID.randomUUID().toString();
 		this.entryStartTs = Instant.now().truncatedTo(ChronoUnit.SECONDS).toString().replace("T"," ").replace("Z","");
 		this.prayerId = null;
+	}
+	public Entry(GenericRecord record) { 
+		this.entryId = String.valueOf(record.get("entryId"));
+		this.prayerId = String.valueOf(record.get("prayerId"));
+		this.entryStartTs = String.valueOf(record.get("entryStartTs"));
+		this.entryEndTs = String.valueOf(record.get("entryEndTs"));
+		this.text = String.valueOf(record.get("text"));
 	}
 
 	// getters

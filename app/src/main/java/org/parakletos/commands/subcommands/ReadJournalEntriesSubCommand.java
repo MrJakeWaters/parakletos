@@ -24,15 +24,15 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 	}
 	public void run() {
 		String entriesDir = String.valueOf(this.configs.get("entriesDir"));
-		this.setEntries(entriesDir);
+		this.readEntries(entriesDir);
 	}
 	public PaginatedDisplay getJournalContent() {
 		return this.journalContent;
 	}
-	public void setEntries(String directory) {
+	public void readEntries(String directory) {
 		for (File f: new File(directory).listFiles()) {
 			if (f.isDirectory()) {
-				this.setEntries(f.getAbsolutePath());
+				this.readEntries(f.getAbsolutePath());
 			} else {
 				Avro avro = new Avro();
 				List<GenericRecord> entryRecord = avro.getRecords(f.getAbsolutePath(), Entry.class);
