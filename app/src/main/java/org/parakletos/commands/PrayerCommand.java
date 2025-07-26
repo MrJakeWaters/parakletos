@@ -16,11 +16,24 @@ public class PrayerCommand extends Command {
 			AddPrayerSubCommand subCommand = new AddPrayerSubCommand(this.args, this.activePrayerDir);
 
 		} else if (this.function.equals("--read")) {
-			ReadPrayerListSubCommand subCommand = new ReadPrayerListSubCommand(this.args, this.activePrayerDir);
+			// set to active or archived prayer directory
+			String prayerDir = "";
+			if (this.args[0].equals("--archive")) {
+				prayerDir = this.archivePrayerDir;	
+			} else {
+				prayerDir = this.activePrayerDir;	
+			}
+
+			// read prayers
+			ReadPrayerListSubCommand subCommand = new ReadPrayerListSubCommand(this.args, prayerDir);
 			subCommand.getPrayerContent().print();
 
 		} else if (this.function.equals("--archive")) {
 			ArchivePrayerSubCommand subCommand = new ArchivePrayerSubCommand(this.args, this.activePrayerDir, this.archivePrayerDir);
+
+		} else if (this.function.equals("--restore")) {
+			RestorePrayerSubCommand subCommand = new RestorePrayerSubCommand(this.args, this.activePrayerDir, this.archivePrayerDir);
+
 		} else {
 			System.out.println("No command specified");
 
