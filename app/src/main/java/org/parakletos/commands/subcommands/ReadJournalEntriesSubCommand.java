@@ -51,18 +51,39 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 				// add prayerId details if it exists
 				if (entry.get("prayerId") != null) {
 					// get prayer record
-					String prayerFile = String.format("%s/prayer-list/%s.avro", Init.PK_CONFIG_HOME, entry.get("prayerId")).replaceAll("//","/");
+					String prayerFile = this.getPrayerFilename(String.valueOf(entry.get("prayerId")));
 					List<GenericRecord> prayerRecord = avro.getRecords(prayerFile, Prayer.class);
 					GenericRecord prayer = prayerRecord.get(0);
 
 					// format prayer id and content in output
-					String prayerContent = String.format("%s%s%s%s%s", Formatting.ITALICS, Formatting.BLUE, Formatting.BOLD_ON, prayer.get("content"), Formatting.RESET);
+					String archiveFlag = this.getArchiveFlag(prayerFile);
+					String prayerContent = String.format("%s%s%s%s%s%s", archiveFlag, Formatting.ITALICS, Formatting.BLUE, Formatting.BOLD_ON, prayer.get("content"), Formatting.RESET);
 					entryContent = String.format("%s%s%s%s\n\t%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET, prayerContent);
 				} else {
 					entryContent = String.format("%s%s%s%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET);
 				}
 				this.journalContent.addContent(entryContent);
 			}
+		}
+	}
+	public String getArchiveFlag(String prayerFilename) {
+		if (prayerFilename.contains("archive")) {
+			return String.format("%s%s[Archived]%s ", Formatting.RED, Formatting.ITALICS, Formatting.RESET);
+		} else {
+			return "";
+		}
+	}
+	public String getPrayerFilename(String prayerId) {
+		// determine if prayer is archived or not
+		String archive = String.format("%s/prayer-list/archive/%s.avro", Init.PK_CONFIG_HOME, prayerId).replaceAll("//","/");
+		String active = String.format("%s/prayer-list/active/%s.avro", Init.PK_CONFIG_HOME, prayerId).replaceAll("//","/");
+		if (new File(archive).exists()) {
+			return archive;
+		} else if (new File(active).exists()) {
+			return active;
+		} else {
+			System.out.println(String.format("Prayer [%s] does not exist", prayerId));
+			return "";
 		}
 	}
 	public String formatEntryTimestamp(String ts) {
