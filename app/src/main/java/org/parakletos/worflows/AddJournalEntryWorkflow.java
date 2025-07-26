@@ -21,7 +21,7 @@ public class AddJournalEntryWorkflow {
 	private Workflow workflow = new Workflow();
 
 	public AddJournalEntryWorkflow(Entry entry) {
-		this.prayerDir = String.format("%s/prayer-list", Init.PK_CONFIG_HOME).replaceAll("//","/");
+		this.prayerDir = String.format("%s/prayer-list/active", Init.PK_CONFIG_HOME).replaceAll("//","/");
 		this.entry = entry;
 
 		// Display and update entry
