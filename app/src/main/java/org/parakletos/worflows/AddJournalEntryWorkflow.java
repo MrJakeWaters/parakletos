@@ -45,7 +45,7 @@ public class AddJournalEntryWorkflow {
 			String prayerId = String.valueOf(this.prayerIds.get(index));
 	
 			// finalizing everything
-			System.out.println(String.format("Attaching prayerId [%s] to entry", prayerId));
+			System.out.println(String.format("%s\nAttaching prayerId [%s] to entry", id, prayerId));
 			this.entry.setPrayerId(prayerId);
 
 		} else {
