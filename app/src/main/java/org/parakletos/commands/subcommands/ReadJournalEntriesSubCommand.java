@@ -49,7 +49,7 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 				String textOutput = String.format("\n\n  %s%s", Formatting.CYAN, entry.get("text"));
 
 				// add prayerId details if it exists
-				if (entry.get("prayerId") != null) {
+				if (!String.valueOf(entry.get("prayerId")).equals("null")) { // accounts for legacy prayers and entries
 					// get prayer record
 					String prayerFile = this.getPrayerFilename(String.valueOf(entry.get("prayerId")));
 					List<GenericRecord> prayerRecord = avro.getRecords(prayerFile, Prayer.class);
