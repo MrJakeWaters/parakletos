@@ -31,6 +31,9 @@ public class ArchivePrayerSubCommand extends SubCommand {
 			Avro avro = new Avro();
 			List<GenericRecord> records = avro.getRecords(activeFilename, Prayer.class);
 			GenericRecord prayer = records.get(0);
+
+			// add answer to the prayer if applicable before archived
+			// convert GenericRecord back to prayer, add resolution, save
 			
 			boolean isMoved = new File(activeFilename).renameTo(new File(archiveFilename));
 			String output = String.format("Prayer [%s] Archived for [%s] Restored\n%s", prayer.get("prayerId"), prayer.get("entity"), prayer.get("content"));
