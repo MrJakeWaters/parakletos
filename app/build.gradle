@@ -31,10 +31,9 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
-    testLogging {
-        showStandardStreams = true
-    }
+	useJUnitPlatform()
+	testLogging.showStandardStreams = true
+	testLogging.exceptionFormat = "full"
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
