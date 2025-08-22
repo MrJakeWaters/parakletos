@@ -33,6 +33,7 @@ public class Avro<T> {
 			if (!f.exists() && !fullPath.equals("")) {
 				f.mkdir();
 				System.out.println(String.format("[INFO] Directory Created: %s", fullPath));
+
 			}
 			fullPath = String.format("%s/%s", fullPath, directory);
 		}
@@ -49,11 +50,14 @@ public class Avro<T> {
 				while (dataFileReader.hasNext()) {
 					record = dataFileReader.next(record);
 					output.add(record);
+
 				}
 				return output;
+
 			} catch (IOException e) {
 				e.printStackTrace();
 				return output;
+
 			}
 	}
 	public boolean write(String filename, T data) {
@@ -82,9 +86,11 @@ public class Avro<T> {
 			dataFileWriter.append(avroRecord);
 			dataFileWriter.close();
 			return true;
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
+
 		}
 	}
 }
