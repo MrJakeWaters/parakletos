@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 public class BibleSuperSearchApi {
 	public static String BOOKS_URL = "https://api.biblesupersearch.com/api/books";
 	public static String REFERENCE_URL = "https://api.biblesupersearch.com/api?bible=";
+	public static boolean ONLINE_STATUS = Online.INSTANCE.getStatus();
 	public HttpClient client = HttpClient.newHttpClient();
 	public ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 	public BibleSuperSearchApi() {}
@@ -97,18 +98,26 @@ public class BibleSuperSearchApi {
 			Map<String, String> configs = mapper.readValue(new File(Init.PK_CONFIG), Map.class);
 			String bibleVersion = configs.get("bibleVersion");
 			String url = String.format("%s%s&reference=%s", BibleSuperSearchApi.REFERENCE_URL, bibleVersion, bibleVerseReference);
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create(url))
-				.build();
-			String responseBody = client.send(request, BodyHandlers.ofString()).body();
-			JsonNode root = mapper.readTree(responseBody);
-			String book = root.path("results").get(0).path("book_short").asText();
-			String chapter = root.path("results").get(0).path("chapter_verse").asText().split(":")[0];
-			String output = String.format("%s[%s %s] %s%s\n", Formatting.BOLD_ON, book, chapter, bibleVersion.toUpperCase(), Formatting.BOLD_OFF);
-			for (JsonNode index: root.path("results").get(0).path("verse_index").path(chapter)) {
-				String i = index.toString();
-				String verse = root.path("results").get(0).path("verses").path(bibleVersion).path(chapter).path(i).path("text").asText();
-				output = String.format("%s%s(%s%s%s%s%s)%s %s", output, Formatting.YELLOW, Formatting.WHITE, Formatting.BOLD_ON, i, Formatting.BOLD_OFF, Formatting.YELLOW, Formatting.WHITE, verse);
+			String output = "";
+
+			// if there is an internet connection query bible search
+			if (BibleSuperSearchApi.ONLINE_STATUS == true) {
+				HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create(url))
+					.build();
+				String responseBody = client.send(request, BodyHandlers.ofString()).body();
+				JsonNode root = mapper.readTree(responseBody);
+				String book = root.path("results").get(0).path("book_short").asText();
+				String chapter = root.path("results").get(0).path("chapter_verse").asText().split(":")[0];
+				output = String.format("%s[%s %s] %s%s\n", Formatting.BOLD_ON, book, chapter, bibleVersion.toUpperCase(), Formatting.BOLD_OFF);
+				for (JsonNode index: root.path("results").get(0).path("verse_index").path(chapter)) {
+					String i = index.toString();
+					String verse = root.path("results").get(0).path("verses").path(bibleVersion).path(chapter).path(i).path("text").asText();
+					output = String.format("%s%s(%s%s%s%s%s)%s %s", output, Formatting.YELLOW, Formatting.WHITE, Formatting.BOLD_ON, i, Formatting.BOLD_OFF, Formatting.YELLOW, Formatting.WHITE, verse);
+
+				}
+			} else {
+				output = "You are offline";
 
 			}
 			return output;
