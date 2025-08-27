@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Optional;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.io.InputStream;
+import java.util.Properties;
 import java.io.FileNotFoundException;
 // java parser
 import com.github.javaparser.StaticJavaParser;
@@ -33,6 +36,7 @@ public class CommandFactory {
 		this.commands.put("bible", () -> this.bibleCommand());	
 		this.commands.put("prayer", () -> this.prayerCommand());
 		this.commands.put("help", () -> this.helpCommand());
+		this.commands.put("version", () -> this.versionCommand());
 
 	}
 	public Map<String, Runnable> getCommands() {
@@ -76,6 +80,29 @@ public class CommandFactory {
 
 		// display
 		hu.display();
+
+	}
+	public void versionCommand() {
+		// ensures new minor version is not incremented by more than 1
+		Properties properties = new Properties();
+		String packageVersion = "";
+		try {
+			// read and output versioning file to console
+			InputStream input = getClass().getClassLoader().getResourceAsStream("version.properties");
+			properties.load(input);
+
+			// get version details
+			String major = properties.getProperty("major");
+			String minor = properties.getProperty("minor");
+			String micro = properties.getProperty("micro");
+
+			// display
+			System.out.println(String.format("parakletos version %s.%s.%s", major, minor, micro));
+
+		} catch (IOException e) {
+			System.out.println("No version found");
+
+		}
 
 	}
 

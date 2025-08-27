@@ -3,7 +3,10 @@ package org.parakletos;
 // java
 import java.util.Map;
 import java.util.List;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Properties;
 // junit
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,6 +40,31 @@ public class CommandFactoryTest {
 		// asset
 		String message = String.format("Commands that don't have a description: [%s]", String.join(",", emptyCommandDescriptions));
 		assertEquals(false, emptyDescriptions, message);
+
+	}
+	@Test
+	void isVersionPackageFormatCorrect() {
+		// ensures new minor version is not incremented by more than 1
+		Properties properties = new Properties();
+		boolean parseError = false;
+		try {
+			// read and output versioning file to console
+			InputStream input = getClass().getClassLoader().getResourceAsStream("version.properties");
+			properties.load(input);
+
+			// set current and previous versions
+			int major = Integer.parseInt(properties.getProperty("major"));
+			int minor = Integer.parseInt(properties.getProperty("minor"));
+			int micro = Integer.parseInt(properties.getProperty("micro"));
+
+		} catch (NumberFormatException e) {
+			parseError = true;
+
+		} catch (IOException e) {
+			parseError = true;
+			e.printStackTrace();
+		}
+		assertEquals(false, parseError);
 
 	}
 
