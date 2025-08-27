@@ -6,7 +6,7 @@ import java.util.logging.LogManager;
 
 public class App {
 	public final static String WELCOME_MESSAGE = "Glory to God in the highest and peace to his people on earth";
-	public final static String EXIT_MESSAGE = "\nAll Done!";
+	public final static String EXIT_MESSAGE = String.format("\nAll Done!%s", Formatting.RESET);
     public String start(String[] args) {
 		System.out.println(App.WELCOME_MESSAGE);
 
@@ -20,6 +20,7 @@ public class App {
 
 		// run commands
 		CommandFactory factory = new CommandFactory(args);
+		factory.execute();
 		return App.EXIT_MESSAGE;
     }
 

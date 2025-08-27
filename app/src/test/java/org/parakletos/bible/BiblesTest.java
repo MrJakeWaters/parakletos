@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class BiblesTest {
 	@Test
 	void DoAllBibleVersionOptionsExist() {
+		// ensures that all bible versions that are displayed through the "bible set-version" command exist
 		BibleSuperSearchApi api = new BibleSuperSearchApi();
 		JsonNode bibles = api.getBibles();
 

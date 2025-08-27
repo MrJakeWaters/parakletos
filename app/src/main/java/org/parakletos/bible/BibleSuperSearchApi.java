@@ -118,14 +118,12 @@ public class BibleSuperSearchApi {
 
 		} catch (IOException e) {
 			// handling exception
-			System.out.println(bibleVerseReference);
-			e.printStackTrace();
+			System.out.println(String.format("You're likely not connected to the internet", bibleVerseReference));
 			return "";
 
 		} catch (InterruptedException e) {
 			// handling exception
-			System.out.println(bibleVerseReference);
-			e.printStackTrace();
+			System.out.println(String.format("InterruptedException when getting [%s]", bibleVerseReference));
 			return "";
 
 		}
