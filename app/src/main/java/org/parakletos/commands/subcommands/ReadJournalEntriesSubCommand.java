@@ -1,6 +1,6 @@
 package org.parakletos;
 
-// standard
+// java
 import java.io.File;
 import java.util.List;
 import java.lang.Math;
@@ -25,14 +25,17 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 	public void run() {
 		String entriesDir = String.valueOf(this.configs.get("entriesDir"));
 		this.readEntries(entriesDir);
+
 	}
 	public PaginatedDisplay getJournalContent() {
 		return this.journalContent;
+
 	}
 	public void readEntries(String directory) {
 		for (File f: new File(directory).listFiles()) {
 			if (f.isDirectory()) {
 				this.readEntries(f.getAbsolutePath());
+
 			} else {
 				Avro avro = new Avro();
 				List<GenericRecord> entryRecord = avro.getRecords(f.getAbsolutePath(), Entry.class);
@@ -59,18 +62,23 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 					String archiveFlag = this.getArchiveFlag(prayerFile);
 					String prayerContent = String.format("%s%s%s%s%s%s", archiveFlag, Formatting.ITALICS, Formatting.BLUE, Formatting.BOLD_ON, prayer.get("content"), Formatting.RESET);
 					entryContent = String.format("%s%s%s%s\n\t%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET, prayerContent);
+
 				} else {
 					entryContent = String.format("%s%s%s%s\n", idOutput, timestampOutput, textOutput, Formatting.RESET);
+
 				}
 				this.journalContent.addContent(entryContent);
+
 			}
 		}
 	}
 	public String getArchiveFlag(String prayerFilename) {
 		if (prayerFilename.contains("archive")) {
 			return String.format("%s%s[Archived]%s ", Formatting.RED, Formatting.ITALICS, Formatting.RESET);
+
 		} else {
 			return "";
+
 		}
 	}
 	public String getPrayerFilename(String prayerId) {
@@ -79,11 +87,14 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 		String active = String.format("%s/prayer-list/active/%s.avro", Init.PK_CONFIG_HOME, prayerId).replaceAll("//","/");
 		if (new File(archive).exists()) {
 			return archive;
+
 		} else if (new File(active).exists()) {
 			return active;
+
 		} else {
 			System.out.println(String.format("Prayer [%s] does not exist", prayerId));
 			return "";
+
 		}
 	}
 	public String formatEntryTimestamp(String ts) {
@@ -96,9 +107,11 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 			SimpleDateFormat displayFormat = new SimpleDateFormat("EEE, MMM d h:mm a z");
 			Date d = parseFormat.parse(ts);
 			return String.valueOf(displayFormat.format(d));
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return "";
+
 		}
 	}
 	public String getFormattedDuration(String startTs, String endTs) {
@@ -110,12 +123,15 @@ public class ReadJournalEntriesSubCommand extends SubCommand {
 			float seconds = (fractional_minutes - (float) minutes) * 60;
 			if (minutes == 0) {
 				return String.format("%s%s%s seconds%s%s", Formatting.BOLD_ON, Formatting.PURPLE, (int) seconds, Formatting.WHITE, Formatting.BOLD_OFF);
+
 			} else {
 				return String.format("%s%s%s minutes %s seconds%s%s", Formatting.BOLD_ON, Formatting.PURPLE, minutes, (int) seconds, Formatting.WHITE, Formatting.BOLD_OFF);
+
 			}
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return "";
+
 		}
 	}
 }

@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 
 public class BibleSuperSearchApi {
-	public static String BOOKS_URL = "https://api.biblesupersearch.com/api/books";
+	public static String BIBLES_URL = "https://api.biblesupersearch.com/api/bibles";
 	public static String REFERENCE_URL = "https://api.biblesupersearch.com/api?bible=";
 	public static boolean ONLINE_STATUS = Online.INSTANCE.getStatus();
 	public HttpClient client = HttpClient.newHttpClient();
@@ -42,6 +42,7 @@ public class BibleSuperSearchApi {
 
 		}
 	}
+
 	public String getRandomBibleVerseReference() {
 		try {
 			// return client
@@ -60,6 +61,7 @@ public class BibleSuperSearchApi {
 
 		}
 	}
+
 	public String getBibleBookChapterReference(String bookName, int chapter) {
 			try {
 				String bibleBooksJson = new String(getClass().getClassLoader().getResourceAsStream("bibleBooks.json").readAllBytes());
@@ -75,6 +77,7 @@ public class BibleSuperSearchApi {
 			}
 
 	}
+
 	public String getRandomBibleChapterReference() {
 		try {
 			// return client
@@ -121,17 +124,38 @@ public class BibleSuperSearchApi {
 
 			}
 			return output;
+
 		} catch (IOException e) {
 			// handling exception
-			System.out.println(bibleVerseReference);
-			e.printStackTrace();
+			System.out.println(String.format("You're likely not connected to the internet", bibleVerseReference));
 			return "";
 
 		} catch (InterruptedException e) {
 			// handling exception
-			System.out.println(bibleVerseReference);
-			e.printStackTrace();
+			System.out.println(String.format("InterruptedException when getting [%s]", bibleVerseReference));
 			return "";
+
+		}
+	}
+	
+	public JsonNode getBibles() {
+		try {
+			// get bible object and fields
+			
+			// retrieve and parse all bible version names that exist
+			HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(BIBLES_URL))
+				.build();
+			String responseBody = client.send(request, BodyHandlers.ofString()).body();
+			return mapper.readTree(responseBody).path("results");
+
+		} catch (IOException e) {
+			// handling exception
+			return mapper.createObjectNode();
+
+		} catch (InterruptedException e) {
+			// handling exception
+			return mapper.createObjectNode();
 
 		}
 	}

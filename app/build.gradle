@@ -17,17 +17,18 @@ repositories {
 }
 
 dependencies {
-    implementation libs.guava
-    // https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
-    implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.1')
+	implementation libs.guava
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml
+	implementation('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.19.1')
 	implementation("org.jline:jline:3.30.4")
 	implementation('org.apache.avro:avro:1.12.0')
 	implementation('org.languagetool:language-all:6.6')
 	implementation("org.slf4j:slf4j-nop:2.0.17")
 	implementation("lc.kra.system:system-hook:3.8")
 	implementation ('org.apache.commons:commons-lang3:3.18.0')
-    testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.1')
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.1')
+	implementation 'com.github.javaparser:javaparser-core:3.27.0'
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 test {
